@@ -1,75 +1,57 @@
-'use strict';
-import bcrypt from 'bcrypt-nodejs'
+
+import bcrypt from 'bcrypt-nodejs';
 
 module.exports = (sequelize, DataTypes) => {
-  var User = sequelize.define('User', {
+  const User = sequelize.define('User', {
     companyName: {
       type: DataTypes.STRING,
       allowNull: true,
-      unique: true
+      unique: false,
     },
     firstName: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: true,
-    },
-    companyName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      unique: true
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        len: [6],
+      },
     },
     phoneNumber: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     email: {
-      type: DataTypes.STRING
-      unique: true
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
       validate: {
-        isEmail:{
-        message: "Invalid email address"
-        }
-      }
+        isEmail: {
+          message: 'Invalid email address',
+        },
+      },
     },
-    companyName: {
-      type: DataTypes.STRING
-    }
-
+    // role: {
+    //   type: DataTypes.ENUM('Admin', 'User'),
+    //   defaultValue: 'Admin',
+    // },
   }, {
-    hooks:
+    hooks: {
+      beforeCreate: (user) => {
+        user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync());
+      },
+    },
   });
-  User.associate = function(models) {
-    // associations can be defined here
-  };
-  User.beforeCreate(function(user, options) {
-    return cryptPassword(user.password)
-      .then(success => {
-        user.password = success;
-      })
-      .catch(err => {
-        if (err) console.log(err);
-      });
-  });
-
-function cryptPassword(password) {
-  console.log("cryptPassword" + password);
-  return new Promise(function(resolve, reject) {
-    bcrypt.genSalt(10, function(err, salt) {
-      // Encrypt password using bycrpt module
-      if (err) return reject(err);
-
-      bcrypt.hash(password, salt, null, function(err, hash) {
-        if (err) return reject(err);
-        return resolve(hash);
-      });
-    });
-  });
-
+  // User.associate = (models) => {
+  //   User.hasMany(models.Invoice, {
+  //     foreignKey: 'UserId',
+  //     as: 'Invoices',
+  //   });
+  // };
   return User;
 };
