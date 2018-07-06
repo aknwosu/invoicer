@@ -1,7 +1,7 @@
 
 
 module.exports = (sequelize, DataTypes) => {
-  const Orders = sequelize.define('Orders', {
+  const Order = sequelize.define('Order', {
     product: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -19,12 +19,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-  Orders.associate = (models) => {
+  Order.associate = (models) => {
     // associations can be defined here
-    Orders.belongsTo(models.Invoice, {
+    Order.belongsTo(models.Invoice, {
       foreignKey: 'invoiceId',
       onDelete: 'CASCADE',
     });
   };
-  return Orders;
+  return Order;
 };

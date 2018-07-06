@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) = {
+module.exports = (sequelize, DataTypes) => {
   const Invoice = sequelize.define('Invoice', {
     customerName: {
       type: DataTypes.STRING,
@@ -7,18 +7,18 @@ module.exports = (sequelize, DataTypes) = {
     customerEmail: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
       validate: {
         isEmail: {
           message: 'Invalid email address',
         },
       },
-    }
-  Invoice.associate = models => {
-    Invoice.hasMany(models.Orders, {
+    },
+  });
+  Invoice.associate = (models) => {
+    Invoice.hasMany(models.Order, {
       foreignKey: 'InvoiceId',
-      as: "InvoiceDetail"
+      as: 'InvoiceDetail',
     });
-  }
-  return Invoice
-}
+  };
+  return Invoice;
+};

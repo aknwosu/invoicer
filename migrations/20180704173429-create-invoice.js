@@ -14,7 +14,6 @@ module.exports = {
     customerEmail: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true,
       validate: {
         isEmail: {
           message: 'Invalid email address',
