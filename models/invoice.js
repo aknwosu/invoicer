@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   Invoice.associate = (models) => {
     Invoice.hasMany(models.Order, {
-      foreignKey: 'InvoiceId',
+      foreignKey: 'invoiceId',
       as: 'InvoiceDetail',
     });
   };
