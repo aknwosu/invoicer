@@ -25,6 +25,11 @@ module.exports = {
     },
     invoiceId: {
       type: Sequelize.INTEGER,
+      references: {
+        model: 'Invoices',
+        key: 'id',
+        as: 'invoiceId',
+      },
     },
     createdAt: {
       allowNull: false,
