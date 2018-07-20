@@ -3,7 +3,8 @@ import bcrypt from 'bcrypt-nodejs';
 import { User } from '../models';
 // const { User } = require('../models/user');
 
-const keys = require('../config/keys');
+const { JWTSECRET } = process.env;
+
 
 const userDetails = (user) => {
   const fields = {
@@ -25,7 +26,7 @@ class UserController {
           userId: createdUser.id,
           email: createdUser.email,
           role: createdUser.role,
-        }, keys.JWTSECRET, { expiresIn: '365 days' });
+        }, JWTSECRET, { expiresIn: '365 days' });
         return res
           .status(200)
           .send({
@@ -65,7 +66,7 @@ class UserController {
             userId: user.id,
             email: user.email,
             role: user.role,
-          }, keys.JWTSECRET, { expiresIn: '360 days' });
+          }, JWTSECRET, { expiresIn: '360 days' });
           response.status(200).send({ message: 'logged in', user: userDetails(user), token });
         } else {
           response.status(400).send({ message: 'invalid password' });
